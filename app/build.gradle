@@ -24,6 +24,7 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/app_release.kotlin_module'
     }
 }
 
