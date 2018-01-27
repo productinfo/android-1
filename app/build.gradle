@@ -39,7 +39,7 @@ dependencies {
     compile 'com.github.kittinunf.fuel:fuel-android:1.10.0'
     compile 'com.github.vicpinm:krealmextensions:1.1.1'
     compile 'org.jetbrains.anko:anko:0.10.1'
-    compile 'com.github.matteocrippa:karamba:0.0.5'
+    compile 'com.github.matteocrippa:karamba:1.1.0'
     compile 'com.github.matteocrippa:FragmentContextivity:0.0.2'
 }
 

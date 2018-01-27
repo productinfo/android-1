@@ -17,6 +17,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import matteocrippa.it.karamba.toCamelCase
 import org.jetbrains.anko.itemsSequence
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -124,8 +125,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         // retrieve all the categories
-        Category().queryAll().forEach {
-            menu.add(it.name)
-        }
+        Category().queryAll()
+                .sortedBy {
+                    it.name
+                }
+                .forEach {
+                    menu.add(it.name.toCamelCase())
+                }
     }
 }
