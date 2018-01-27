@@ -9,12 +9,13 @@ import conference.mobile.awesome.boostco.de.amc.model.Conference
  */
 
 sealed class AweConfApi : FuelRouting {
-    override val basePath = "https://aweconf.heroku.com/api"
+    override val basePath = "https://aweconf.herokuapp.com/api"
 
     // conferences
-    class list: AweConfApi()
-    class category: AweConfApi()
-    class submit(val conference: Conference): AweConfApi()
+    class list : AweConfApi()
+
+    class category : AweConfApi()
+    class submit(val conference: Conference) : AweConfApi()
 
     override val method: Method
         get() {
@@ -40,21 +41,21 @@ sealed class AweConfApi : FuelRouting {
                 is list -> listOf()
                 is category -> listOf()
                 is submit -> listOf()
-                /*
-                title: req.body.title,
-    year: new Date(req.body.startdate).getFullYear(),
-    startdate: req.body.startdate,
-    enddate: req.body.enddate,
-    city: req.body.city,
-    country: req.body.country,
-    where: req.body.where,
-    category: req.body.category,
-    homepage: req.body.homepage,
-    callforpaper: req.body.callforpaper,
-    twitter: req.body.twitter,
-    emojiflag: emojiflag,
-    isnew: true
-                 */
+            /*
+            title: req.body.title,
+year: new Date(req.body.startdate).getFullYear(),
+startdate: req.body.startdate,
+enddate: req.body.enddate,
+city: req.body.city,
+country: req.body.country,
+where: req.body.where,
+category: req.body.category,
+homepage: req.body.homepage,
+callforpaper: req.body.callforpaper,
+twitter: req.body.twitter,
+emojiflag: emojiflag,
+isnew: true
+             */
             }
         }
 

@@ -9,11 +9,15 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.onesignal.OneSignal
+import com.vicpin.krealmextensions.queryAll
 import conference.mobile.awesome.boostco.de.amc.R
+import conference.mobile.awesome.boostco.de.amc.model.Category
+import conference.mobile.awesome.boostco.de.amc.net.getRemoteCategories
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import org.jetbrains.anko.itemsSequence
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -23,6 +27,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
+            // TODO: open Conference Submit
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
@@ -48,6 +53,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        // use category to populate menu
+        addCategoryMenuOptions()
+
+        // retrieve cats
+        getRemoteCategories {
+            when (it) {
+                true -> {
+                    // update cats
+                    addCategoryMenuOptions()
+                }
+                else -> {
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -60,19 +80,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
-
-        menu.add(0, 0, 0, "Option1").setShortcut('3', 'c');
-        menu.add(0, 1, 0, "Option2").setShortcut('3', 'c');
-        menu.add(0, 2, 0, "Option3").setShortcut('4', 's');
-
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
-        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -98,5 +110,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun addCategoryMenuOptions() {
+        // quick access to nav menu
+        val menu = nav_view.menu
+
+        // if we have more than 1 item (static) we need to remove all the others
+        val items = menu.itemsSequence().count()
+        if (items > 1) {
+            for (i in 1..items) {
+                menu.removeItem(i)
+            }
+        }
+        // retrieve all the categories
+        Category().queryAll().forEach {
+            menu.add(it.name)
+        }
     }
 }

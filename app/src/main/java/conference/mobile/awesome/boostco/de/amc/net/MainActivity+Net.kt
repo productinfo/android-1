@@ -43,7 +43,7 @@ fun MainActivity.getRemoteCategories(callback: (Boolean) -> Unit) {
                 // clean up db
                 Category().deleteAll()
                 // loop categories
-                for (category in response.optJSONArray("category").arrayOfString()) {
+                for (category in response.optJSONArray("categories").arrayOfString()) {
                     Category(category).save()
                 }
                 callback(true)
