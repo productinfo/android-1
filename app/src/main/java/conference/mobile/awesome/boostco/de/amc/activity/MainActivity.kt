@@ -60,6 +60,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+
+        menu.add(0, 0, 0, "Option1").setShortcut('3', 'c');
+        menu.add(0, 1, 0, "Option2").setShortcut('3', 'c');
+        menu.add(0, 2, 0, "Option3").setShortcut('4', 's');
+
         return true
     }
 
