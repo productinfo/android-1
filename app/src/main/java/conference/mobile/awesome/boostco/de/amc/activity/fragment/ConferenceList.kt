@@ -85,6 +85,9 @@ class ConferenceList : Fragment() {
 
         // show data locally
         filterByCategory(category)
+
+        // force download in background
+        mListener?.onConferenceRefresh(category)
     }
 
     interface OnFragmentInteractionListener {

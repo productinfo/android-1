@@ -9,8 +9,8 @@ android {
         applicationId "conference.mobile.awesome.boostco.de.amc"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 20
-        versionName "2.0"
+        versionCode 21
+        versionName "2.1"
         manifestPlaceholders = [
                 onesignal_app_id               : "",
                 onesignal_google_project_number: "REMOTE"
