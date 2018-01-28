@@ -60,7 +60,7 @@ open class Conference : RealmObject {
 
 
         // categories
-        for (cat in json.getJSONArray("categories").arrayOfString()) {
+        for (cat in json.getJSONArray("category").arrayOfString()) {
             Category().queryFirst { query -> query.equalTo("name", cat) }?.let {
                 this.category.add(it)
             }

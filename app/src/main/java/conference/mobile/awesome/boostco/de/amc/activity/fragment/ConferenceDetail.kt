@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import conference.mobile.awesome.boostco.de.amc.R
 
 /**
@@ -59,6 +58,44 @@ class ConferenceDetail : Fragment() {
     override fun onDetach() {
         super.onDetach()
         mListener = null
+    }
+
+    private fun setupView() {
+/*
+        // populate fields
+        conferenceDetailTitle?.text = conference.title ?: ""
+        conferenceDetailCountry?.text = conference.country ?: ""
+        conferenceDetailCity?.text = conference.city ?: ""
+        conferenceDetailStartDate?.text = conference.startDate?.convertTo("yyyy/MM/dd")
+        conferenceDetailEndDate?.text = conference.endDate?.convertTo("yyyy/MM/dd")
+        conferenceDetailWebsite?.text = conference.homepage ?: ""
+
+        conferenceDetailCallForPaper?.visibility = if (conference.callForPaper) View.VISIBLE else View.GONE
+
+        if (conference.topics.count() > 0) {
+            conferenceDetailTopicsTitle?.visibility = View.VISIBLE
+            conferenceDetailTopics?.visibility = View.VISIBLE
+            conferenceDetailTopics?.text = conference.topics.reduce { acc, topic ->
+                acc + ", $topic"
+            }
+        } else {
+            conferenceDetailTopicsTitle?.visibility = View.GONE
+            conferenceDetailTopics?.visibility = View.GONE
+        }
+
+        // setup map
+        conferenceDetailMap?.onCreate(savedInstanceState)
+        conferenceDetailMap?.onResume()
+        conferenceDetailMap?.getMapAsync { map ->
+            // create poi marker
+            val poiPosition = getLocationFromAddress(conference.where ?: "")
+            // add marker
+            val marker = map.addMarker(MarkerOptions().position(poiPosition ?: LatLng(0.0, 0.0)).title(conference.where))
+            // force title to be visible
+            marker.showInfoWindow()
+            // move camera
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(poiPosition ?: LatLng(0.0, 0.0), 13.0f))
+        }*/
     }
 
     /**

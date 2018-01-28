@@ -14,6 +14,7 @@ import com.onesignal.OneSignal
 import com.vicpin.krealmextensions.queryAll
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Category
+import conference.mobile.awesome.boostco.de.amc.model.Conference
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteCategories
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteConferences
 import io.realm.Realm
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import matteocrippa.it.karamba.toCamelCase
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener {
 
     var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
 
@@ -81,7 +82,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         // add category list
-        supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("")).commit()
+        // TODO: find how to use a wildcard
+        supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("mobile")).commit()
     }
 
     override fun onBackPressed() {
@@ -140,4 +142,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     menu.add(it.name.toCamelCase())
                 }
     }
+
+    // Listener
+
+    override fun onConferenceListSelect(conference: Conference) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onConferenceRefresh() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
