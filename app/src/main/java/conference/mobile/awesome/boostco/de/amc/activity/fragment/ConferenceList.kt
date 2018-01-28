@@ -11,9 +11,11 @@ import com.vicpin.krealmextensions.query
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
 import kotlinx.android.synthetic.main.cell_conference_list.view.*
+import kotlinx.android.synthetic.main.cell_conference_list_header.view.*
 import kotlinx.android.synthetic.main.fragment_conference_list.*
 import matteocrippa.it.fragmentcontextivity.context
 import matteocrippa.it.karamba.convertTo
+import matteocrippa.it.karamba.monthName
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onQueryTextListener
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -209,7 +211,7 @@ class ConferenceList : Fragment() {
             }
 
             // populate cell
-            //view?.cellConferenceHeaderTitle?.text = item.year.toString() + " / " + item.startDate?.monthName()?.capitalize()
+            view?.cellConferenceHeaderTitle?.text = item.year.toString() + " / " + item.startDate?.monthName()?.capitalize()
 
             return view!!
         }
