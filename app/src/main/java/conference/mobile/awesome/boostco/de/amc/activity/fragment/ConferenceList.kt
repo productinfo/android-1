@@ -35,6 +35,9 @@ class ConferenceList : Fragment() {
         if (arguments != null) {
             category = arguments!!.getString(ARG_PARAM1)
         }
+
+        // force download in background
+        mListener?.onConferenceRefresh(category)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -86,8 +89,6 @@ class ConferenceList : Fragment() {
         // show data locally
         filterByCategory(category)
 
-        // force download in background
-        mListener?.onConferenceRefresh(category)
     }
 
     interface OnFragmentInteractionListener {
