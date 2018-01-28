@@ -155,7 +155,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/conferenceDetailTopicsTitle"
+                    android:id="@+id/conferenceDetailCategoryTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/topics"
@@ -163,7 +163,7 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/conferenceDetailTopics"
+                    android:id="@+id/conferenceDetailCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="List of topics"

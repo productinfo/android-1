@@ -6,19 +6,26 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.vicpin.krealmextensions.queryFirst
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
+import kotlinx.android.synthetic.main.fragment_conference_detail.*
+import matteocrippa.it.karamba.convertTo
 
 class ConferenceDetail : Fragment() {
 
     private var conferenceId: String? = null
     private var conference: Conference? = null
+    private var savedInstanceState: Bundle? = null
 
     private var mListener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.savedInstanceState = savedInstanceState
         if (arguments != null) {
             conferenceId = arguments!!.getString(ARG_PARAM1)
 
@@ -52,41 +59,44 @@ class ConferenceDetail : Fragment() {
     }
 
     private fun setupView() {
-/*
+
         // populate fields
-        conferenceDetailTitle?.text = conference.title ?: ""
-        conferenceDetailCountry?.text = conference.country ?: ""
-        conferenceDetailCity?.text = conference.city ?: ""
-        conferenceDetailStartDate?.text = conference.startDate?.convertTo("yyyy/MM/dd")
-        conferenceDetailEndDate?.text = conference.endDate?.convertTo("yyyy/MM/dd")
-        conferenceDetailWebsite?.text = conference.homepage ?: ""
+        conferenceDetailTitle?.text = conference?.title ?: ""
+        conferenceDetailCountry?.text = conference?.country ?: ""
+        conferenceDetailCity?.text = conference?.city ?: ""
+        conferenceDetailStartDate?.text = conference?.startDate?.convertTo("yyyy/MM/dd")
+        conferenceDetailEndDate?.text = conference?.endDate?.convertTo("yyyy/MM/dd")
+        conferenceDetailWebsite?.text = conference?.homepage ?: ""
 
-        conferenceDetailCallForPaper?.visibility = if (conference.callForPaper) View.VISIBLE else View.GONE
+        conferenceDetailCallForPaper?.visibility = if (conference?.callForPaper == true) View.VISIBLE else View.GONE
 
-        if (conference.topics.count() > 0) {
-            conferenceDetailTopicsTitle?.visibility = View.VISIBLE
-            conferenceDetailTopics?.visibility = View.VISIBLE
-            conferenceDetailTopics?.text = conference.topics.reduce { acc, topic ->
-                acc + ", $topic"
+        // by default hide topics
+        conferenceDetailCategoryTitle?.visibility = View.GONE
+        conferenceDetailCategory?.visibility = View.GONE
+
+        conference?.category?.let {
+            if (it.count() > 0) {
+                conferenceDetailCategoryTitle?.visibility = View.VISIBLE
+                conferenceDetailCategory?.visibility = View.VISIBLE
+
+                conferenceDetailCategory?.text = it.map { category -> category.name }.reduce { acc, category ->
+                    acc + ", $category"
+                }
             }
-        } else {
-            conferenceDetailTopicsTitle?.visibility = View.GONE
-            conferenceDetailTopics?.visibility = View.GONE
         }
 
         // setup map
         conferenceDetailMap?.onCreate(savedInstanceState)
         conferenceDetailMap?.onResume()
         conferenceDetailMap?.getMapAsync { map ->
-            // create poi marker
-            val poiPosition = getLocationFromAddress(conference.where ?: "")
+            val position = LatLng(conference?.lat ?: 0.0, conference?.lon ?: 0.0)
             // add marker
-            val marker = map.addMarker(MarkerOptions().position(poiPosition ?: LatLng(0.0, 0.0)).title(conference.where))
+            val marker = map.addMarker(MarkerOptions().position(position).title(conference?.where))
             // force title to be visible
             marker.showInfoWindow()
             // move camera
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(poiPosition ?: LatLng(0.0, 0.0), 13.0f))
-        }*/
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 13.0f))
+        }
     }
 
     interface OnFragmentInteractionListener {}
