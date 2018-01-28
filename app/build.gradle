@@ -9,7 +9,7 @@ android {
         applicationId "conference.mobile.awesome.boostco.de.amc"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1
+        versionCode 20
         versionName "2.0"
         manifestPlaceholders = [
                 onesignal_app_id               : "",
