@@ -13,6 +13,7 @@ import android.view.MenuItem
 import com.onesignal.OneSignal
 import com.vicpin.krealmextensions.queryAll
 import conference.mobile.awesome.boostco.de.amc.R
+import conference.mobile.awesome.boostco.de.amc.extension.getActiveFragments
 import conference.mobile.awesome.boostco.de.amc.model.Category
 import conference.mobile.awesome.boostco.de.amc.model.Conference
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteCategories
@@ -149,8 +150,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onConferenceRefresh() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onConferenceRefresh(category: String?) {
+        getRemoteConferences {
+            when (it) {
+                true -> {
+                    getActiveFragments().forEach { fragment ->
+                        if (fragment is ConferenceList) {
+                            fragment.filterByCategory(category)
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
+        }
     }
 
 }

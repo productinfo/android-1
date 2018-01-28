@@ -63,7 +63,7 @@ class ConferenceList : Fragment() {
         conferenceListSwipeContainer?.setColorSchemeResources(R.color.colorAccent)
         // set swipe action
         conferenceListSwipeContainer?.onRefresh {
-            mListener?.onConferenceRefresh()
+            mListener?.onConferenceRefresh(category)
         }
         // set adapter
         adapter = ConferenceAdapter(this@ConferenceList.context())
@@ -72,24 +72,7 @@ class ConferenceList : Fragment() {
         // set filter search
         conferenceListSearch.onQueryTextListener {
             onQueryTextChange { q ->
-                // if query is not null
-                q?.let { query ->
-                    // if query has at least a char
-                    if (query.isNotEmpty()) {
-                        // filter items
-                        adapter?.data = Conference().query {
-                            it
-                                    .contains("category", category)
-                                    .contains("title", query.toLowerCase())
-                                    .or()
-                                    .contains("where", query.toLowerCase())
-                        }
-                    } else {
-                        // show all
-                        adapter?.data = Conference().query { it.contains("category", category) }
-                    }
-                }
-
+                filterByCategory(category, q)
                 false
             }
             onQueryTextSubmit { _ ->
@@ -98,14 +81,12 @@ class ConferenceList : Fragment() {
         }
 
         // show data locally
-        category?.let {
-            filterByCategory(it)
-        }
+        filterByCategory(category)
     }
 
     interface OnFragmentInteractionListener {
         fun onConferenceListSelect(conference: Conference)
-        fun onConferenceRefresh()
+        fun onConferenceRefresh(category: String?)
     }
 
     companion object {
@@ -120,13 +101,31 @@ class ConferenceList : Fragment() {
         }
     }
 
-    fun filterByCategory(category: String) {
+    fun filterByCategory(category: String?, search: String? = null) {
         this.category = category
 
-        adapter?.data = Conference().query {
-            it.`in`("category.name", arrayOf(category))
-        }
+        adapter?.data = Conference().query { query ->
+            // filter by category
+            category?.let {
+                if (it != "*") {
+                    query.`in`("category.name", arrayOf(it))
+                }
+            }
 
+            // filter by text
+            search?.let {
+                query
+                        .contains("title", it.toLowerCase())
+                        .or()
+                        .contains("where", it.toLowerCase())
+            }
+        }.sortedBy {
+                    it.startDate
+                }
+
+
+        // force hide the spinner
+        conferenceListSwipeContainer?.isRefreshing = false
     }
 
     // Conference adapter
