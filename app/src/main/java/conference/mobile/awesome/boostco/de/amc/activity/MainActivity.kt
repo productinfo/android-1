@@ -3,9 +3,11 @@ package conference.mobile.awesome.boostco.de.amc.activity.fragment
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.onesignal.OneSignal
@@ -13,19 +15,25 @@ import com.vicpin.krealmextensions.queryAll
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Category
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteCategories
+import conference.mobile.awesome.boostco.de.amc.net.getRemoteConferences
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import matteocrippa.it.karamba.toCamelCase
-import org.jetbrains.anko.itemsSequence
+import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        // check if back is needed
+        supportActionBar?.setDisplayHomeAsUpEnabled(intent.getBooleanExtra("backButton", false))
 
         fab.setOnClickListener { view ->
             // TODO: open Conference Submit
@@ -64,11 +72,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true -> {
                     // update cats
                     addCategoryMenuOptions()
+                    // download conferences
+                    getRemoteConferences { }
                 }
                 else -> {
                 }
             }
         }
+
+        // add category list
+        supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("")).commit()
     }
 
     override fun onBackPressed() {
@@ -89,23 +102,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_camera -> {
+        when (item.title) {
+            "Home" -> {
+                // is home
             }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            else -> {
+                // need to figure out
+                Log.d("menu", item.title.toString())
             }
         }
 
@@ -113,17 +116,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    override fun onAttachFragment(fragment: Fragment?) {
+        super.onAttachFragment(fragment)
+        fragment?.let { fragmentList.add(WeakReference(it)) }
+    }
+
     private fun addCategoryMenuOptions() {
         // quick access to nav menu
         val menu = nav_view.menu
 
-        // if we have more than 1 item (static) we need to remove all the others
-        val items = menu.itemsSequence().count()
-        if (items > 1) {
-            for (i in 1..items) {
-                menu.removeItem(i)
-            }
-        }
+        // clear all
+        menu.clear()
+
+        // add home menu
+        menu.add("Home")
+
         // retrieve all the categories
         Category().queryAll()
                 .sortedBy {
