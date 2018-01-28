@@ -88,7 +88,7 @@ class ConferenceList : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        fun onConferenceListSelect(conference: Conference)
+        fun onConferenceListSelected(conference: Conference)
         fun onConferenceRefresh(category: String?)
     }
 
@@ -183,7 +183,7 @@ class ConferenceList : Fragment() {
 
             // set onclick
             view?.onClick {
-                mListener?.onConferenceListSelect(item)
+                mListener?.onConferenceListSelected(item)
             }
 
             // manage favorite button color

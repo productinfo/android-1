@@ -24,7 +24,7 @@ import matteocrippa.it.karamba.toCamelCase
 import java.lang.ref.WeakReference
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener, ConferenceSubmit.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener, ConferenceSubmit.OnFragmentInteractionListener, ConferenceDetail.OnFragmentInteractionListener {
 
     private var lastTitle = ""
     var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
@@ -158,8 +158,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     // 🎧 Conference List
-    override fun onConferenceListSelect(conference: Conference) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onConferenceListSelected(conference: Conference) {
+        // set title
+        setTitle(conference.title)
+        // set fragment
+        val fragment = ConferenceDetail.newInstance(conference.id)
+        val fm = supportFragmentManager.beginTransaction().replace(R.id.frame_content, fragment)
+        fm.addToBackStack(fragment.javaClass.name)
+        fm.commit()
     }
 
     override fun onConferenceRefresh(category: String?) {
