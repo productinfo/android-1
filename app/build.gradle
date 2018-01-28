@@ -15,6 +15,7 @@ android {
                 onesignal_app_id               : "",
                 onesignal_google_project_number: "REMOTE"
         ]
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
