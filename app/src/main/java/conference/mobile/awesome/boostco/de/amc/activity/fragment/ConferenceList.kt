@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.cell_conference_list_header.view.*
 import kotlinx.android.synthetic.main.fragment_conference_list.*
 import matteocrippa.it.fragmentcontextivity.context
 import matteocrippa.it.karamba.convertTo
+import matteocrippa.it.karamba.month
 import matteocrippa.it.karamba.monthName
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onQueryTextListener
@@ -211,7 +212,7 @@ class ConferenceList : Fragment() {
             }
 
             // populate cell
-            view?.cellConferenceHeaderTitle?.text = item.year.toString() + " / " + item.startDate?.monthName()?.capitalize()
+            view?.cellConferenceHeaderTitle?.text = "${item.year} / ${item.startDate.monthName().capitalize()}"
 
             return view!!
         }
@@ -219,7 +220,7 @@ class ConferenceList : Fragment() {
         override fun getHeaderId(position: Int): Long {
             val item = getItem(position) as Conference
             item.let { conference ->
-                return (conference.year?.toLong() ?: 0) + (conference.startDate?.month ?: 0)
+                return conference.year.toLong() + conference.startDate.month().toLong()
             }
         }
     }

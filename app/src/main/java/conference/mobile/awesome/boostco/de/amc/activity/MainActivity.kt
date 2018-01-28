@@ -26,7 +26,13 @@ import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener, ConferenceSubmit.OnFragmentInteractionListener {
 
+    private var lastTitle = ""
     var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
+
+    private fun setTitle(title: String) {
+        lastTitle = this.title.toString()
+        this.title = title
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +43,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(intent.getBooleanExtra("backButton", false))
 
         fab.setOnClickListener {
-            supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceSubmit()).commit()
+            // set title
+            setTitle("Submit a new Conference")
+            // set fragment
+            val fragment = ConferenceSubmit()
+            val fm = supportFragmentManager.beginTransaction().replace(R.id.frame_content, fragment)
+            fm.addToBackStack(fragment.javaClass.name)
+            fm.commit()
         }
 
         // Realm
@@ -91,6 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
+            title = lastTitle
         }
     }
 
@@ -106,11 +119,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.title) {
             "Home" -> {
-                title = "All Conferences"
+                setTitle("All Conferences")
                 supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("*")).commit()
             }
             else -> {
-                title = item.title.toString().toCamelCase()
+                setTitle(item.title.toString().toCamelCase())
                 supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance(item.title.toString().toLowerCase())).commit()
             }
         }
@@ -144,7 +157,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
     }
 
-    // 🎧 Listener
     // 🎧 Conference List
     override fun onConferenceListSelect(conference: Conference) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
