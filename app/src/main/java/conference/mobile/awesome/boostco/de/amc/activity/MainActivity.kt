@@ -2,12 +2,10 @@ package conference.mobile.awesome.boostco.de.amc.activity.fragment
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.onesignal.OneSignal
@@ -25,6 +23,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import matteocrippa.it.karamba.toCamelCase
 import java.lang.ref.WeakReference
 
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener {
 
     var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
@@ -37,13 +36,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // check if back is needed
         supportActionBar?.setDisplayHomeAsUpEnabled(intent.getBooleanExtra("backButton", false))
 
-        fab.setOnClickListener { view ->
-            // TODO: open Conference Submit
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener {
+            supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceSubmit()).commit()
         }
 
-        // Setup realm
+        // Realm
         Realm.init(applicationContext)
         val config = RealmConfiguration
                 .Builder()
@@ -52,7 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Realm.setDefaultConfiguration(config)
         Realm.getInstance(config)
 
-        // setup Onesignal
+        // OneSignal
         OneSignal.startInit(applicationContext)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
@@ -82,9 +79,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        // add category list
-        // TODO: find how to use a wildcard
-        supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("mobile")).commit()
+        // set generic title
+        title = "All Conferences"
+
+        // show all category list
+        supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("*")).commit()
     }
 
     override fun onBackPressed() {
@@ -107,11 +106,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.title) {
             "Home" -> {
-                // is home
+                title = "All Conferences"
+                supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance("*")).commit()
             }
             else -> {
-                // need to figure out
-                Log.d("menu", item.title.toString())
+                title = item.title.toString().toCamelCase()
+                supportFragmentManager.beginTransaction().replace(R.id.frame_content, ConferenceList.newInstance(item.title.toString().toLowerCase())).commit()
             }
         }
 
