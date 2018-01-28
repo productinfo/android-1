@@ -4,10 +4,24 @@
     android:layout_height="match_parent"
     tools:context="conference.mobile.awesome.boostco.de.amc.activity.fragment.ConferenceList">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <SearchView
+        android:id="@+id/conferenceListSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/conferenceListSwipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/conferenceListSearch">
+
+
+        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+            android:id="@+id/conferenceList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

@@ -41,6 +41,8 @@ dependencies {
     compile 'org.jetbrains.anko:anko:0.10.1'
     compile 'com.github.matteocrippa:karamba:1.1.0'
     compile 'com.github.matteocrippa:FragmentContextivity:0.0.2'
+    compile 'se.emilsjolander:stickylistheaders:2.7.0'
+    implementation 'com.google.android.gms:play-services-maps:11.6.2'
 }
 
 kotlin {

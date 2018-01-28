@@ -83,4 +83,8 @@ class ConferenceList : Fragment() {
             return fragment
         }
     }
+
+    fun filterByCategory(category: String) {
+        this.category = category
+    }
 }// Required empty public constructor
