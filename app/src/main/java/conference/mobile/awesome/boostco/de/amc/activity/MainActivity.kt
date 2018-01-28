@@ -24,7 +24,7 @@ import matteocrippa.it.karamba.toCamelCase
 import java.lang.ref.WeakReference
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ConferenceList.OnFragmentInteractionListener, ConferenceSubmit.OnFragmentInteractionListener {
 
     var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
 
@@ -144,8 +144,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
     }
 
-    // Listener
-
+    // 🎧 Listener
+    // 🎧 Conference List
     override fun onConferenceListSelect(conference: Conference) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -164,6 +164,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }
+    }
+
+    // 🎧 Conference Submit
+    override fun onConferenceSubmit(hashMap: HashMap<String, Any>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
