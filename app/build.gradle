@@ -12,7 +12,7 @@ android {
         versionCode 22
         versionName "2.2"
         manifestPlaceholders = [
-                onesignal_app_id               : "",
+                onesignal_app_id               : "3a4145ee-74e2-4765-b1cf-b5925a19d5c6",
                 onesignal_google_project_number: "REMOTE"
         ]
         vectorDrawables.useSupportLibrary = true
