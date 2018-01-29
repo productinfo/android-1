@@ -70,7 +70,7 @@ class ConferenceList : Fragment() {
             0 -> {
 
                 val catText = if (category == "*") "all" else category
-                val actionText = if (Preferences.shared.getSubscription(category)) "subscribe" else "unsubscribe"
+                val actionText = if (Preferences.shared.getSubscription(category)) "unsubscribe" else "subscribe"
 
                 alert("Would you like to $actionText to $catText notifications?", "Push Notifications") {
                     positiveButton("Yes") {
