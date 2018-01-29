@@ -56,7 +56,7 @@ open class Conference : RealmObject {
         this.approved = json.optBoolean("approved")
         this.lat = json.optDouble("lat")
         this.lon = json.optDouble("lon")
-        this.added = json.optString("added").toDate("")
+        this.added = json.optString("added").toDate("yyyy-MM-dd")
 
 
         // categories

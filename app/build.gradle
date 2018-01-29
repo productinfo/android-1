@@ -43,6 +43,7 @@ dependencies {
     compile 'com.github.matteocrippa:karamba:1.1.0'
     compile 'com.github.matteocrippa:FragmentContextivity:0.0.2'
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
+    compile 'com.scottyab:secure-preferences-lib:0.1.4'
     implementation 'com.google.android.gms:play-services-maps:11.6.2'
 }
 

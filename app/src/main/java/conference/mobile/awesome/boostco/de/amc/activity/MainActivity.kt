@@ -14,6 +14,7 @@ import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.extension.getActiveFragments
 import conference.mobile.awesome.boostco.de.amc.model.Category
 import conference.mobile.awesome.boostco.de.amc.model.Conference
+import conference.mobile.awesome.boostco.de.amc.model.Like
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteCategories
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteConferences
 import io.realm.Realm
@@ -28,11 +29,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private var lastTitle = ""
     var fragmentList: ArrayList<WeakReference<Fragment>> = ArrayList()
-
-    private fun setTitle(title: String) {
-        lastTitle = this.title.toString()
-        this.title = title
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +62,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init()
+
+        // Like setup
+        Like.shared.context = applicationContext
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -112,10 +111,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.title) {
             "Home" -> {
@@ -137,6 +132,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragment?.let { fragmentList.add(WeakReference(it)) }
     }
 
+    // manage dynamic menu contents
     private fun addCategoryMenuOptions() {
         // quick access to nav menu
         val menu = nav_view.menu
@@ -155,6 +151,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .forEach {
                     menu.add(it.name.toCamelCase())
                 }
+    }
+
+    // manages title stack
+    private fun setTitle(title: String) {
+        lastTitle = this.title.toString()
+        this.title = title
     }
 
     // 🎧 Conference List

@@ -10,6 +10,7 @@ import android.widget.BaseAdapter
 import com.vicpin.krealmextensions.query
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
+import conference.mobile.awesome.boostco.de.amc.model.Like
 import kotlinx.android.synthetic.main.cell_conference_list.view.*
 import kotlinx.android.synthetic.main.cell_conference_list_header.view.*
 import kotlinx.android.synthetic.main.fragment_conference_list.*
@@ -20,7 +21,6 @@ import matteocrippa.it.karamba.monthName
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onQueryTextListener
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
 import org.jetbrains.anko.support.v4.onRefresh
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
 import kotlin.properties.Delegates
@@ -160,10 +160,6 @@ class ConferenceList : Fragment() {
             // current item
             val item = getItem(p0) as Conference
 
-            // retrieve current favorite status
-            val favoriteIdentifier = "FAV/${item.homepage}"
-            val favoriteState = defaultSharedPreferences.getBoolean(favoriteIdentifier, false)
-
             // view
             var view = p1
 
@@ -192,11 +188,11 @@ class ConferenceList : Fragment() {
             }
 
             // manage favorite button color
-            view?.cellConferenceFavoriteButton?.imageResource = if (favoriteState) R.drawable.ic_star_selected else R.drawable.ic_star_deselected
+            view?.cellConferenceFavoriteButton?.imageResource = if (Like.shared.getLike(item.id)) R.drawable.ic_star_selected else R.drawable.ic_star_deselected
 
             // add on click for favorite
             view?.cellConferenceFavoriteButton?.onClick {
-                defaultSharedPreferences.edit().putBoolean(favoriteIdentifier, !favoriteState).commit()
+                Like.shared.triggerLike(item.id)
                 // force update the list
                 this@ConferenceAdapter.notifyDataSetChanged()
             }

@@ -10,9 +10,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.vicpin.krealmextensions.queryFirst
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
+import conference.mobile.awesome.boostco.de.amc.model.Like
 import kotlinx.android.synthetic.main.fragment_conference_detail.*
 import matteocrippa.it.karamba.convertTo
-import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
 class ConferenceDetail : Fragment() {
 
@@ -47,13 +47,17 @@ class ConferenceDetail : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.conference_detail_menu, menu)
+        menu?.add("Like")
+        if (Like.shared.getLike(conferenceId)) {
+            menu?.getItem(0)?.setIcon(R.drawable.ic_star_selected)
+        } else menu?.getItem(0)?.setIcon(R.drawable.ic_star_deselected)
+        menu?.getItem(0)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.conference_detail_like -> {
+            0 -> {
                 triggerLike(conferenceId)
             }
             else -> {
@@ -133,12 +137,9 @@ class ConferenceDetail : Fragment() {
     }
 
     private fun triggerLike(conferenceId: String?) {
-        conferenceId?.let {
-            // retrieve current favorite status
-            val favoriteIdentifier = "FAV/$it"
-            val currentState = defaultSharedPreferences.getBoolean(favoriteIdentifier, false)
-
-            defaultSharedPreferences.edit().putBoolean(favoriteIdentifier, !currentState).commit()
+        conference?.let {
+            Like.shared.triggerLike(it.id)
+            activity?.invalidateOptionsMenu()
         }
     }
 }
