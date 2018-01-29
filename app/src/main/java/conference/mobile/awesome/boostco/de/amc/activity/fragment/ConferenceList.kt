@@ -70,8 +70,9 @@ class ConferenceList : Fragment() {
             0 -> {
 
                 val catText = if (category == "*") "all" else category
+                val actionText = if (Preferences.shared.getSubscription(category)) "subscribe" else "unsubscribe"
 
-                alert("Would you like to subscribe to $catText notifications?", "Push Notifications") {
+                alert("Would you like to $actionText to $catText notifications?", "Push Notifications") {
                     positiveButton("Yes") {
                         // update value in memory
                         Preferences.shared.triggerSubscription(category)
