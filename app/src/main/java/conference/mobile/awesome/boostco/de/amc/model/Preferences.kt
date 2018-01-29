@@ -7,14 +7,14 @@ import com.securepreferences.SecurePreferences
  * Created by matteocrippa on 29/01/2018.
  */
 
-class Like private constructor() {
+class Preferences private constructor() {
     // singleton
     private object Holder {
-        val INSTANCE = Like()
+        val INSTANCE = Preferences()
     }
 
     companion object {
-        val shared: Like by lazy { Holder.INSTANCE }
+        val shared: Preferences by lazy { Holder.INSTANCE }
     }
 
     // init class
@@ -42,6 +42,17 @@ class Like private constructor() {
             val current = shared.getBoolean(favoriteIdentifier, false)
             shared.edit().putBoolean(favoriteIdentifier, !current).commit()
         }
+    }
+
+    fun getSubscription(category: String?): Boolean {
+        val favoriteIdentifier = "SUB/$category"
+        return shared.getBoolean(favoriteIdentifier, false)
+    }
+
+    fun triggerSubscription(category: String?) {
+        val favoriteIdentifier = "SUB/$category"
+        val current = shared.getBoolean(favoriteIdentifier, false)
+        shared.edit().putBoolean(favoriteIdentifier, !current).commit()
     }
 
 }

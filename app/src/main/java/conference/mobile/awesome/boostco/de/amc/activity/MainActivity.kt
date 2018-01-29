@@ -14,7 +14,7 @@ import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.extension.getActiveFragments
 import conference.mobile.awesome.boostco.de.amc.model.Category
 import conference.mobile.awesome.boostco.de.amc.model.Conference
-import conference.mobile.awesome.boostco.de.amc.model.Like
+import conference.mobile.awesome.boostco.de.amc.model.Preferences
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteCategories
 import conference.mobile.awesome.boostco.de.amc.net.getRemoteConferences
 import io.realm.Realm
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .init()
 
         // Like setup
-        Like.shared.context = applicationContext
+        Preferences.shared.context = applicationContext
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -123,6 +123,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
+        nav_view.setCheckedItem(item.itemId)
+
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
@@ -143,13 +145,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // add home menu
         menu.add("Home")
 
+        // add categories
+        val catMenu = menu.addSubMenu("Categories")
+        catMenu.setGroupCheckable(0, true, true)
+
         // retrieve all the categories
         Category().queryAll()
                 .sortedBy {
                     it.name
                 }
                 .forEach {
-                    menu.add(it.name.toCamelCase())
+                    catMenu.add(it.name.toCamelCase())
                 }
     }
 
@@ -181,6 +187,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
                 else -> {
+                }
+            }
+        }
+    }
+
+    override fun onConferenceSubscribeNotification(subscribed: Boolean, category: String?) {
+        category?.let {
+            when (subscribed) {
+                true -> {
+                    OneSignal.sendTag(it, it)
+                }
+                false -> {
+                    OneSignal.deleteTag(it)
                 }
             }
         }

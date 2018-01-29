@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.vicpin.krealmextensions.queryFirst
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
-import conference.mobile.awesome.boostco.de.amc.model.Like
+import conference.mobile.awesome.boostco.de.amc.model.Preferences
 import kotlinx.android.synthetic.main.fragment_conference_detail.*
 import matteocrippa.it.karamba.convertTo
 
@@ -48,7 +48,7 @@ class ConferenceDetail : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         menu?.add("Like")
-        if (Like.shared.getLike(conferenceId)) {
+        if (Preferences.shared.getLike(conferenceId)) {
             menu?.getItem(0)?.setIcon(R.drawable.ic_star_selected)
         } else menu?.getItem(0)?.setIcon(R.drawable.ic_star_deselected)
         menu?.getItem(0)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -137,8 +137,8 @@ class ConferenceDetail : Fragment() {
     }
 
     private fun triggerLike(conferenceId: String?) {
-        conference?.let {
-            Like.shared.triggerLike(it.id)
+        conferenceId?.let {
+            Preferences.shared.triggerLike(it)
             activity?.invalidateOptionsMenu()
         }
     }

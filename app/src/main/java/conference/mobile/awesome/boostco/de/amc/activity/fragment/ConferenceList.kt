@@ -3,14 +3,12 @@ package conference.mobile.awesome.boostco.de.amc.activity.fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.BaseAdapter
 import com.vicpin.krealmextensions.query
 import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
-import conference.mobile.awesome.boostco.de.amc.model.Like
+import conference.mobile.awesome.boostco.de.amc.model.Preferences
 import kotlinx.android.synthetic.main.cell_conference_list.view.*
 import kotlinx.android.synthetic.main.cell_conference_list_header.view.*
 import kotlinx.android.synthetic.main.fragment_conference_list.*
@@ -21,6 +19,7 @@ import matteocrippa.it.karamba.monthName
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onQueryTextListener
+import org.jetbrains.anko.support.v4.alert
 import org.jetbrains.anko.support.v4.onRefresh
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
 import kotlin.properties.Delegates
@@ -39,6 +38,9 @@ class ConferenceList : Fragment() {
 
         // force download in background
         mListener?.onConferenceRefresh(category)
+
+        // add menu
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +51,44 @@ class ConferenceList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.add("Subscribe Notifications")
+        if (Preferences.shared.getSubscription(category)) {
+            menu?.getItem(0)?.setIcon(R.drawable.ic_notifications_on)
+
+        } else {
+            menu?.getItem(0)?.setIcon(R.drawable.ic_notifications_off)
+        }
+        menu?.getItem(0)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            0 -> {
+
+                val catText = if (category == "*") "all" else category
+
+                alert("Would you like to subscribe to $catText notifications?", "Push Notifications") {
+                    positiveButton("Yes") {
+                        // update value in memory
+                        Preferences.shared.triggerSubscription(category)
+                        // add onesignal event
+                        mListener?.onConferenceSubscribeNotification(Preferences.shared.getSubscription(category), category)
+                        // reload menu
+                        activity?.invalidateOptionsMenu()
+                    }
+                    negativeButton("No") { }
+                }.show()
+
+            }
+            else -> {
+
+            }
+        }
+        return true
     }
 
     override fun onAttach(context: Context?) {
@@ -95,6 +135,7 @@ class ConferenceList : Fragment() {
     interface OnFragmentInteractionListener {
         fun onConferenceListSelected(conference: Conference)
         fun onConferenceRefresh(category: String?)
+        fun onConferenceSubscribeNotification(subscribed: Boolean, category: String?)
     }
 
     companion object {
@@ -188,11 +229,11 @@ class ConferenceList : Fragment() {
             }
 
             // manage favorite button color
-            view?.cellConferenceFavoriteButton?.imageResource = if (Like.shared.getLike(item.id)) R.drawable.ic_star_selected else R.drawable.ic_star_deselected
+            view?.cellConferenceFavoriteButton?.imageResource = if (Preferences.shared.getLike(item.id)) R.drawable.ic_star_selected else R.drawable.ic_star_deselected
 
             // add on click for favorite
             view?.cellConferenceFavoriteButton?.onClick {
-                Like.shared.triggerLike(item.id)
+                Preferences.shared.triggerLike(item.id)
                 // force update the list
                 this@ConferenceAdapter.notifyDataSetChanged()
             }
