@@ -17,6 +17,7 @@ import matteocrippa.it.fragmentcontextivity.context
 import matteocrippa.it.karamba.convertTo
 import matteocrippa.it.karamba.month
 import matteocrippa.it.karamba.monthName
+import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onQueryTextListener
 import org.jetbrains.anko.support.v4.defaultSharedPreferences
@@ -191,7 +192,7 @@ class ConferenceList : Fragment() {
             }
 
             // manage favorite button color
-            view?.cellConferenceFavoriteButton?.alpha = if (favoriteState) 1.0f else 0.3f
+            view?.cellConferenceFavoriteButton?.imageResource = if (favoriteState) R.drawable.ic_star_selected else R.drawable.ic_star_deselected
 
             // add on click for favorite
             view?.cellConferenceFavoriteButton?.onClick {

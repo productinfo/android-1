@@ -3,9 +3,7 @@ package conference.mobile.awesome.boostco.de.amc.activity.fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -14,6 +12,7 @@ import conference.mobile.awesome.boostco.de.amc.R
 import conference.mobile.awesome.boostco.de.amc.model.Conference
 import kotlinx.android.synthetic.main.fragment_conference_detail.*
 import matteocrippa.it.karamba.convertTo
+import org.jetbrains.anko.support.v4.defaultSharedPreferences
 
 class ConferenceDetail : Fragment() {
 
@@ -32,6 +31,9 @@ class ConferenceDetail : Fragment() {
             // retrieve current conf
             conference = Conference().queryFirst { it.equalTo("id", conferenceId) }
         }
+
+        // add menu
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,23 @@ class ConferenceDetail : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.conference_detail_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.conference_detail_like -> {
+                triggerLike(conferenceId)
+            }
+            else -> {
+
+            }
+        }
+        return true
     }
 
     override fun onAttach(context: Context?) {
@@ -110,6 +129,16 @@ class ConferenceDetail : Fragment() {
             args.putString(ARG_PARAM1, conferenceId)
             fragment.arguments = args
             return fragment
+        }
+    }
+
+    private fun triggerLike(conferenceId: String?) {
+        conferenceId?.let {
+            // retrieve current favorite status
+            val favoriteIdentifier = "FAV/$it"
+            val currentState = defaultSharedPreferences.getBoolean(favoriteIdentifier, false)
+
+            defaultSharedPreferences.edit().putBoolean(favoriteIdentifier, !currentState).commit()
         }
     }
 }

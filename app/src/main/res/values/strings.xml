@@ -17,4 +17,6 @@
     <string name="category">CATEGORY</string>
     <string name="website">WEBSITE</string>
     <string name="call_for_paper">Call for Paper: Open</string>
+    <string name="like">Like</string>
+    <string name="liked">Liked</string>
 </resources>
