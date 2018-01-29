@@ -26,7 +26,6 @@ open class Conference : RealmObject {
     var homepage = ""
     var callForPaper = false
     var emojiFlag = ""
-    var isNew = false
     var twitter = ""
     var approved = false
     var lat: Double = 0.0
@@ -35,7 +34,14 @@ open class Conference : RealmObject {
     var topic = RealmList<Topic>()
     var category = RealmList<Category>()
 
-    constructor() : super() {}
+
+    var isNew: Boolean
+        get() {
+            return this.added > Preferences.shared.getLastVisit()
+        }
+        set(value) {}
+
+    constructor() : super()
     constructor(json: JSONObject) : super() {
         mapping(json)
     }
@@ -51,7 +57,6 @@ open class Conference : RealmObject {
         this.homepage = json.optString("homepage")
         this.callForPaper = json.optBoolean("callforpaper")
         this.emojiFlag = json.optString("emojiflag")
-        this.isNew = json.optBoolean("isNew")
         this.twitter = json.optString("twitter")
         this.approved = json.optBoolean("approved")
         this.lat = json.optDouble("lat")

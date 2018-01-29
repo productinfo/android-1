@@ -2,6 +2,7 @@ package conference.mobile.awesome.boostco.de.amc.model
 
 import android.content.Context
 import com.securepreferences.SecurePreferences
+import java.util.*
 
 /**
  * Created by matteocrippa on 29/01/2018.
@@ -53,6 +54,14 @@ class Preferences private constructor() {
         val favoriteIdentifier = "SUB/$category"
         val current = shared.getBoolean(favoriteIdentifier, false)
         shared.edit().putBoolean(favoriteIdentifier, !current).commit()
+    }
+
+    fun getLastVisit(): Date {
+        return Date(shared.getLong("lastVisit", 0))
+    }
+
+    fun setLastVisit() {
+        shared.edit().putLong("lastVisit", Date().time).commit()
     }
 
 }

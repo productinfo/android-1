@@ -134,6 +134,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fragment?.let { fragmentList.add(WeakReference(it)) }
     }
 
+    override fun onStop() {
+        super.onStop()
+        Preferences.shared.setLastVisit()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Preferences.shared.setLastVisit()
+    }
+
     // manage dynamic menu contents
     private fun addCategoryMenuOptions() {
         // quick access to nav menu

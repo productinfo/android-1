@@ -64,9 +64,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            tools:text="NEW"
-            android:textColor="@color/colorAccent"
-            android:rotation="-90" />
+            android:rotation="-90"
+            android:text="@string/newConf"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
