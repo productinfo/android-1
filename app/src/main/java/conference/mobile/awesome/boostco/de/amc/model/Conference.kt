@@ -50,8 +50,10 @@ open class Conference : RealmObject {
         this.id = json.optString("_id")
         this.title = json.optString("title")
         this.year = json.optInt("year")
-        this.startDate = json.optString("startdate").toDate("yyyy-MM-dd")
-        this.endDate = json.optString("enddate").toDate("yyyy-MM-dd")
+        if (json.optJSONObject("date") != null) {
+            this.startDate = json.getJSONObject("date").optString("start").toDate("yyyy-MM-dd")
+            this.endDate = json.getJSONObject("date").optString("end").toDate("yyyy-MM-dd")
+        }
         this.city = json.optString("city")
         this.where = json.optString("where")
         this.homepage = json.optString("homepage")
@@ -59,10 +61,11 @@ open class Conference : RealmObject {
         this.emojiFlag = json.optString("emojiflag")
         this.twitter = json.optString("twitter")
         this.approved = json.optBoolean("approved")
-        this.lat = json.optDouble("lat")
-        this.lon = json.optDouble("lon")
+        if (json.optJSONObject("geo") != null) {
+            this.lat = json.getJSONObject("geo").optDouble("lat")
+            this.lon = json.getJSONObject("geo").optDouble("lng")
+        }
         this.added = json.optString("added").toDate("yyyy-MM-dd")
-
 
         // categories
         for (cat in json.getJSONArray("category").arrayOfString()) {
