@@ -56,10 +56,10 @@ class ConferenceList : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         menu?.add("Subscribe Notifications")
         if (Preferences.shared.getSubscription(category)) {
-            menu?.getItem(0)?.setIcon(R.drawable.ic_notifications_on)
+            menu?.getItem(0)?.setIcon(R.drawable.ic_notifications_off)
 
         } else {
-            menu?.getItem(0)?.setIcon(R.drawable.ic_notifications_off)
+            menu?.getItem(0)?.setIcon(R.drawable.ic_notifications_on)
         }
         menu?.getItem(0)?.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         super.onCreateOptionsMenu(menu, inflater)
