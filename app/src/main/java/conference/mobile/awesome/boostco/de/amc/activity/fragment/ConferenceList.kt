@@ -16,6 +16,7 @@ import matteocrippa.it.fragmentcontextivity.context
 import matteocrippa.it.karamba.convertTo
 import matteocrippa.it.karamba.month
 import matteocrippa.it.karamba.monthName
+import matteocrippa.it.karamba.year
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onQueryTextListener
@@ -255,7 +256,10 @@ class ConferenceList : Fragment() {
             }
 
             // populate cell
-            view?.cellConferenceHeaderTitle?.text = "${item.year} / ${item.startDate.monthName().capitalize()}"
+            item.let { conference ->
+                val title = "${conference.startDate.year()} / ${item.startDate.monthName().capitalize()}"
+                view?.cellConferenceHeaderTitle?.text = title
+            }
 
             return view!!
         }
@@ -263,7 +267,7 @@ class ConferenceList : Fragment() {
         override fun getHeaderId(position: Int): Long {
             val item = getItem(position) as Conference
             item.let { conference ->
-                return conference.year.toLong() + conference.startDate.month().toLong()
+                return (conference.startDate.year().toLong() * 1000) + conference.startDate.month().toLong()
             }
         }
     }
