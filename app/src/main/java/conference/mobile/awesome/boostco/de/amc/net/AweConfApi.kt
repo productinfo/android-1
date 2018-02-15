@@ -9,7 +9,7 @@ import conference.mobile.awesome.boostco.de.amc.model.Conference
  */
 
 sealed class AweConfApi : FuelRouting {
-    override val basePath = "https://aweconf.herokuapp.com/api"
+    override val basePath = "https://core.aweconf.com/api"
 
     // conferences
     class list : AweConfApi()
